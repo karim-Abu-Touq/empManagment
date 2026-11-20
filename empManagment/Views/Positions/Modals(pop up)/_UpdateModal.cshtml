@@ -1,0 +1,114 @@
+﻿@model clsPosition
+<div class="modal fade" id="editModal-@Model.PosID" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    Edit Position
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <form asp-controller="Positions"
+                  asp-action="Update"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div class="modal-body">
+
+                    <input type="hidden"
+                           name="PosID"
+                           value="@Model.PosID" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">
+                            Position Title
+                        </label>
+
+                        <input type="text"
+                               name="PosTitle"
+                               value="@Model.PosTitle"
+                               class="form-control"
+                               required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">
+                            Department
+                        </label>
+
+                        <select name="DepartmentID"
+                                class="form-select"
+                                required>
+
+                            @foreach (var dep in ViewBag.Departments)
+                            {
+                                <option value="@dep.DepID"
+                                        selected="@(dep.DepID == Model.DepartmentID)">
+                                    @dep.DepName
+                                </option>
+                            }
+
+                        </select>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                Minimum Salary
+                            </label>
+
+                            <input type="number"
+                                   name="MinSalary"
+                                   value="@Model.MinSalary"
+                                   class="form-control"
+                                   min="0"
+                                   required />
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                Maximum Salary
+                            </label>
+
+                            <input type="number"
+                                   name="MaxSalary"
+                                   value="@Model.MaxSalary"
+                                   class="form-control"
+                                   min="0"
+                                   required />
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-warning">
+                        <i class="bi bi-check-lg me-1"></i>
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

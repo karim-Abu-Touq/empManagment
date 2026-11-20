@@ -1,0 +1,61 @@
+﻿@model clsPosition
+
+<div class="container mt-4">
+
+    <div class="card">
+
+        <div class="card-header">
+            <h3 class="text-primary">ADD Position</h3>
+        </div>
+
+        <div class="card-body">
+            <form method="post">
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="PosTitle" class="form-label">Position Title</label>
+                    <input asp-for="PosTitle" class="form-control" />
+                    <span asp-validation-for="PosTitle" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DepartmentID" class="form-label">Department</label>
+
+                    <select asp-for="DepartmentID"
+                            class="form-select">
+                        <option value="">-- Select Department --</option>
+
+                        @foreach (var department in ViewBag.Departments)
+                        {
+                            <option value="@department.DepID">
+                                @department.DepName
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MinSalary" class="form-label"></label>
+                    <input asp-for="MinSalary" class="form-control" />
+                    <span asp-validation-for="MinSalary" class="text-danger"></span>
+                </div>
+          
+                <div class="mb-3">
+                    <label asp-for="MaxSalary" class="form-label"></label>
+                    <input asp-for="MaxSalary" class="form-control"/>
+                    <span asp-validation-for="MaxSalary" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">ADD</button>
+                <a asp-action="Index" class="btn btn-secondary">Back</a>
+
+
+            </form>
+        </div>
+
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

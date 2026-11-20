@@ -1,0 +1,134 @@
+﻿@model clsEmployee
+
+<div class="container mt-4">
+
+    <div class="card">
+
+        <div class="card-header">
+            <h3 class="text-primary">Update Employee</h3>
+        </div>
+
+        <div class="card-body">
+            <form method="post">
+                <input type="hidden" asp-for="EmpID" />
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="FirstName" class="form-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LastName" class="form-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+
+                <div class="mb-3">
+                    <label asp-for="Phone" class="form-label"></label>
+                    <input asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Salary" class="form-label"></label>
+                    <input asp-for="Salary" class="form-control" />
+                    <span asp-validation-for="Salary" class="text-danger"></span>
+                </div>
+
+
+                <div class="mb-3">
+                    <label asp-for="HireDate" class="form-label"></label>
+                    <input asp-for="HireDate" type="date" class="form-control" />
+                    <span asp-validation-for="HireDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DepartmentID" class="form-label">Department</label>
+                    <select asp-for="DepartmentID" class="form-select" id="DepartmentID">
+                        <option value="">-- Select Department --</option>
+                        @foreach (var dep in ViewBag.Departments)
+                        {
+                            <option value="@dep.DepID" >
+                                @dep.DepName
+                            </option>
+                        }
+                    </select>
+                    <span asp-validation-for="DepartmentID" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PositionID" class="form-label">Position</label>
+                    <select asp-for="PositionID" class="form-select" id="PositionID" >
+                        <option value="">-- Select Position --</option>
+                        @foreach (var pos in ViewBag.Positions)
+                        {
+                            <option value="@pos.PosID" data-department="@pos.DepartmentID">
+                                @pos.PosTitle
+                            </option>
+                        }
+                    </select>
+                    <span asp-validation-for="PositionID" class="text-danger"></span>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">Update</button>
+                <a asp-action="Index" class="btn btn-secondary">Back</a>
+
+
+            </form>
+        </div>
+
+    </div>
+</div>
+<script>
+
+    var departmentSelect = document.getElementById("DepartmentID");
+    var positionSelect = document.getElementById("PositionID");
+
+    function filterPositions() {
+
+        var departmentId = departmentSelect.value;
+
+        var options = positionSelect.querySelectorAll("option");
+
+        options.forEach(function(option) {
+
+            if (option.value === "") {
+                option.hidden = false;
+                return;
+            }
+
+            if (option.getAttribute("data-department") === departmentId) {
+                option.hidden = false;
+            }
+            else {
+                option.hidden = true;
+            }
+
+        });
+    }
+
+    departmentSelect.addEventListener("change", function() {
+
+        filterPositions();
+
+        positionSelect.value = "";
+
+    });
+
+    filterPositions();
+
+</script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

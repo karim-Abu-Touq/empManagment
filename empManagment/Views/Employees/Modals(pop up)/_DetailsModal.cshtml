@@ -1,0 +1,110 @@
+﻿@model clsEmployee
+<div class="modal fade" id="detailsModal-@Model.EmpID" tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+
+                <h5 class="modal-title">
+                    <i class="bi bi-person-circle me-2"></i>
+                    Employee Details
+                </h5>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <strong>Employee ID:</strong>
+                        <div class="form-control">
+                            @Model.EmpID
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Name:</strong>
+                        <div class="form-control">
+                            @Model.FirstName @Model.LastName
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Email:</strong>
+                        <div class="form-control">
+                            @Model.Email
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Phone:</strong>
+                        <div class="form-control">
+                            @Model.Phone
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Department:</strong>
+                        <div class="form-control">
+                            @Model.Department.DepName
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Position:</strong>
+                        <div class="form-control">
+                            @Model.Position.PosTitle
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Salary:</strong>
+                        <div class="form-control">
+                            @Model.Salary
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Hire Date:</strong>
+                        <div class="form-control">
+                            @Model.HireDate.ToShortDateString()
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Close
+                </button>
+
+                <a asp-controller="Employees"
+                   asp-action="Update"
+                   asp-route-id="@Model.EmpID"
+                   class="btn btn-warning">
+                    <i class="bi bi-pencil-square"></i>
+                    Edit
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

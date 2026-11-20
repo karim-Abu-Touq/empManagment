@@ -1,0 +1,68 @@
+﻿@model IEnumerable<clsPosition>
+<div class="container mt-4">
+    <div class="card-header">
+        <h3 class="text-primary fw-bolder">Department: @ViewBag.Department.DepName </h3>
+        <h3 class="text-primary fw-bolder">Positions: </h3>
+        
+
+    </div>
+    <div class="row">
+
+        @foreach (var pos in Model)
+        {
+            <div class="col-md-6 mb-4">
+
+                <div class="card shadow-sm h-100">
+
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            @pos.PosTitle
+                        </h5>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <strong>Position ID:</strong>
+                                @pos.PosID
+                            </div>
+
+                            <div class="col-6">
+                                <strong>Department:</strong>
+                                @ViewBag.Department.DepName
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <strong>Min Salary:</strong>
+                                @pos.MinSalary
+                            </div>
+
+                            <div class="col-6">
+                                <strong>Max Salary:</strong>
+                                @pos.MaxSalary
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>#Employees:</strong>
+                                @pos.PosEmployees.Count();
+                            </div>
+
+                          
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</div>

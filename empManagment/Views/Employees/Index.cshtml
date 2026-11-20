@@ -1,0 +1,228 @@
+﻿@model IEnumerable<clsEmployee>
+
+<div class="contaner mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3 fw-bolder">
+        <h2 class="text-primary fw-bolder">Employees List</h2>
+       
+        <a asp-action="Create" asp-controller="Employees" class="btn btn-primary"> <i class="bi bi-person-fill-add"></i> Add Employee</a>
+    </div>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+    <form asp-action="Find" method="get" class="mb-3">
+
+        <div class="col-md-4 col-lg-3">
+            <div class="input-group">
+
+            <input type="number"  name="id" class="form-control" placeholder="Enter Employee ID" />
+
+            <button type="submit" class="btn btn-primary">Find</button>
+            </div>
+        </div>
+    </form>
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+     
+    <form asp-action="Index" method="get" class="mb-4">
+        <div class="row g-2">
+
+            <div class="col-12 col-md-4">
+                <input type="text" name="search" value="@ViewBag.search" class="form-control" placeholder="Search by name or email" />
+            </div>
+
+            <div class="col-12 col-md-4">
+                <select name="departmentID" id="DepartmentID" class="form-select" onchange="filterPositions()">
+                    <option value="">All Departments</option>
+                    @foreach(var dep in ViewBag.Departments)
+                        {
+                            <option value="@dep.DepID" selected="@(ViewBag.DepartmentID==dep.DepID)">
+                                @dep.DepName
+                            </option>                 
+                        }
+
+                </select>
+            </div>
+
+
+            
+            <div class="col-12 col-md-4">
+                <select name="positionID" class="form-select" id="PositionID" onchange="this.form.submit()">
+                    <option value="">All Positions</option>
+                    @foreach (var pos in ViewBag.Positions)
+                        {
+                        <option value="@pos.PosID" data-department="@pos.DepartmentID" selected="@(ViewBag.PositionID == pos.PosID)">
+                                @pos.PosTitle
+                            </option>
+                        }
+
+                </select>
+            </div>
+
+            <div class="col-12 col-md-2">
+                <button type="submit"
+                        class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i>
+                    Search
+                </button>
+            </div>
+
+
+
+        </div>
+    </form>
+
+    <table class="table table-striped table-bordered text-center align-middle ">
+
+
+        <thead>
+            <tr class="table-primary">
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Depatrment</th>
+                <th scope="col">Position</th>
+                <th scope="col">Salary</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach(var emp in Model)
+            {
+                <tr>
+                    <td>@emp.EmpID</td>
+                    <td>@emp.FirstName @emp.LastName</td>
+                    <td>@emp.Department?.DepName</td>
+                    <td>@emp.Position?.PosTitle</td>
+                    <td>@emp.Salary</td>
+
+                    <td>
+                        <div class="d-flex justify-content-evenly align-items-center">
+                       
+                            <button type="button"
+                                    class="btn btn-primary btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#detailsModal-@emp.EmpID">
+                                <i class="bi bi-info-circle-fill"></i>
+                            </button>
+                              <a asp-controller="Employees" asp-action="Update" asp-route-id="@emp.EmpID" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i>
+                              </a>
+
+                            <button type="button"
+                                    class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal-@emp.EmpID">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+                        </div>
+                    </td>
+                    
+
+                </tr>
+                <partial name="~/Views/Employees/Modals(pop up)/_DetailsModal.cshtml" model="emp" />
+
+                <partial name="~/Views/Employees/Modals(pop up)/_DeleteModal.cshtml" model="emp" />
+
+
+            }
+        </tbody>
+    </table>
+    <label class="text-primary fw-bolder">#Employees: @ViewBag.TotalEmployees</label>
+    <nav>
+        <ul class="pagination justify-content-center">
+
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(ViewBag.CurrentPage - 1)">
+                        Previous
+                    </a>
+                </li>
+            }
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@i">
+                        @i
+                    </a>
+                </li>
+            }
+
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(ViewBag.CurrentPage + 1)">
+                        Next
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </nav>
+</div>
+<script>
+
+    function filterPositions() {
+
+        var departmentId = document.getElementById("DepartmentID").value;
+        var positionSelect = document.getElementById("PositionID");
+
+        var options = positionSelect.getElementsByTagName("option");
+
+        for (var i = 0; i < options.length; i++) {
+
+            var option = options[i];
+
+            
+            if (option.value === "") {
+                option.style.display = "block";
+                continue;
+            }
+
+           
+            if (departmentId === "") {
+                option.style.display = "block";
+            }
+           
+            else if (option.getAttribute("data-department") === departmentId) {
+                option.style.display = "block";
+            }
+          
+            else {
+                option.style.display = "none";
+            }
+        }
+
+       
+        positionSelect.value = "";
+    }
+
+</script>
+@if (ViewBag.ShowDetailsModal != null)
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            var modal = new bootstrap.Modal(
+                document.getElementById("detailsModal-@ViewBag.ShowDetailsModal")
+            );
+
+            modal.show();
+        });
+    </script>
+}
